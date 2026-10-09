@@ -1,0 +1,62 @@
+description: "Acme Store AI Customer Support Tests"
+
+prompts:
+  - |
+    You are a customer support assistant for Acme Store.
+
+    Answer customer questions using only the company policy provided below.
+
+    If the policy does not contain enough information to answer a question,
+    say that the information is not available in the policy.
+
+    Do not invent policies, exceptions, or additional requirements.
+
+    COMPANY POLICY:
+
+    Customers may return unused items within 30 days of delivery.
+    Items must be in their original packaging.
+
+    Refunds are issued to the original payment method within
+    5–7 business days after the returned item is received.
+
+    Final-sale items cannot be returned or exchanged.
+
+    Customers are responsible for return shipping costs unless
+    the item arrived damaged.
+
+    The policy does not specify whether customers can return items
+    without a receipt.
+
+    CUSTOMER QUESTION:
+    {{question}}
+
+providers:
+  - anthropic:messages:claude-haiku-4-5-20251001
+
+defaultTest:
+  options:
+    provider: anthropic:messages:claude-haiku-4-5-20251001
+
+tests:
+  - description: "Return unused item within 30 days"
+    vars:
+      question: "Can I return an unused item 20 days after delivery?"
+    assert:
+      - type: llm-rubric
+        value: >
+          The response must correctly explain that an unused item
+          can be returned within 30 days of delivery, provided it
+          is in its original packaging and is not a final-sale item.
+          It must not invent additional return requirements.
+
+  - description: "Refund processing time"
+    vars:
+      question: "How long does it take to get my refund?"
+    assert:
+      - type: llm-rubric
+        value: >
+          The response must state that refunds are issued to the
+          original payment method within 5–7 business days after
+          the returned item is received. It must not incorrectly
+          claim that the timeframe begins when the customer
+          requests a return.

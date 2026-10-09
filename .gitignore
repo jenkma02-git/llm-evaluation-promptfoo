@@ -1,0 +1,9 @@
+# API keys and local environment variables
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# Promptfoo evaluation results
+.promptfoo/
